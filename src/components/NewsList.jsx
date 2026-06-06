@@ -1,34 +1,57 @@
-return (
-  <div className="news-grid">
-    {articles?.map((article, index) => (
-      <div className="news-card" key={index}>
-        <img
-          src={
-            article.image ||
-            "https://placehold.co/600x400?text=No+Image"
-          }
-          alt={article.title}
-        />
+import { useEffect, useState } from "react";
+import { getNewsByCategory } from "../api/newsApi";
 
-        <div className="news-content">
-          <h3>{article.title}</h3>
+function NewsList({ category }) {
+  const [articles, setArticles] = useState([]);
 
-          <p>
-            {article.description
-              ? article.description
-              : "No description available."}
-          </p>
+  useEffect(() => {
+    fetchNews();
+  }, [category]);
 
-          <a
-            href={article.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="read-more"
-          >
-            Read Full News →
-          </a>
+  const fetchNews = async () => {
+    try {
+      const data = await getNewsByCategory(category);
+      setArticles(data || []);
+    } catch (error) {
+      console.error(error);
+      setArticles([]);
+    }
+  };
+
+  return (
+    <div className="news-grid">
+      {articles?.map((article, index) => (
+        <div className="news-card" key={index}>
+          <img
+            src={
+              article.image ||
+              "https://placehold.co/600x400?text=No+Image"
+            }
+            alt={article.title}
+          />
+
+          <div className="news-content">
+            <h3>{article.title}</h3>
+
+            <p>
+              {article.description
+                ? article.description
+                : "No description available."}
+            </p>
+
+            <a
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="read-more"
+            >
+              Read Full News →
+            </a>
+          </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+}
+
+export default NewsList;
