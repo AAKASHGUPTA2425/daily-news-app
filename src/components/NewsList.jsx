@@ -9,35 +9,23 @@ function NewsList({ category }) {
   }, [category]);
 
   const fetchNews = async () => {
-    const data = await getNewsByCategory(category);
-    setArticles(data);
+    try {
+      const data = await getNewsByCategory(category);
+
+      console.log("DATA:", data);
+
+      setArticles(data || []);
+    } catch (error) {
+      console.error(error);
+      setArticles([]);
+    }
   };
 
   return (
     <div className="news-grid">
-      {articles.map((article, index) => (
+      {articles?.map((article, index) => (
         <div className="news-card" key={index}>
-          <img
-            src={
-              article.urlToImage ||
-              "https://placehold.co/400x200?text=No+Image"
-            }
-            alt={article.title}
-          />
-
-          <div className="news-content">
-            <h3>{article.title}</h3>
-
-            <p>{article.description}</p>
-
-            <a
-              href={article.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Read Full Story →
-            </a>
-          </div>
+          <h3>{article.title}</h3>
         </div>
       ))}
     </div>
