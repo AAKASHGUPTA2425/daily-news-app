@@ -3,6 +3,7 @@ export default async function handler(req, res) {
 
   const API_KEY = process.env.GNEWS_API_KEY;
 
+
   let url;
 
   if (category === "national") {
